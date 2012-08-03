@@ -16,16 +16,16 @@ abstract class SqlAdapter implements AdapterInterface
         $sqlDate = $time->format('Y-m-d H:i:s');
         $query   = 'DELETE FROM %table% WHERE expire_date < ?';
 
-        $this->exec($query, $sqlDate);
+        $this->exec($query, array($sqlDate));
     }
 
     /**
      * Execute statement
      *
      * @param string $query
-     * @param mixed  $arg
+     * @param array  $arg
      */
-    abstract protected function exec($query, $arg);
+    abstract protected function exec($query, array $args);
 
     /**
      * Insert record
@@ -42,9 +42,10 @@ abstract class SqlAdapter implements AdapterInterface
      */
     public function acquire($key)
     {
-        $query = 'INSERT INTO %table% WHERE semaphore_key = ?';
-
-        $ok = $this->insert($query, $key);
+        $query   = 'INSERT INTO %table% (expire_date, semaphore_key) VALUES(?, ?)';
+        $time    = new \DateTime;
+        $sqlDate = $time->format('Y-m-d H:i:s');
+        $ok = $this->insert($query, array($sqlDate, $key));
 
         return $ok ? $key : null;
     }
@@ -55,6 +56,6 @@ abstract class SqlAdapter implements AdapterInterface
     public function release($handle)
     {
         $query = 'DELETE FROM %table% WHERE semaphore_key = ?';
-        $this->exec($query, $handle);
+        $this->exec($query, array($handle));
     }
 }

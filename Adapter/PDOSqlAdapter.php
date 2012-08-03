@@ -29,19 +29,19 @@ class PDOSqlAdapter extends SqlAdapter
      * @param string $query
      * @param mixed  $arg
      */
-    protected function exec($query, $arg)
+    protected function exec($query, array $args)
     {
         $sth = $this->db->prepare(strtr($query, array('%table%' => $this->table)));
-        $sth->execute(array($arg));
+        $sth->execute($args);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function insert($query, $arg)
+    protected function insert($query, array $args)
     {
         try {
-            $this->exec($query, $key);
+            $this->exec($query, $args);
             $ok = true;
         } catch (\PDOException $e) {
             $ok = false;

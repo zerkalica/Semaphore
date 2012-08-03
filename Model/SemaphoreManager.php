@@ -41,7 +41,7 @@ class SemaphoreManager implements SemaphoreManagerInterface
         $ok      = null;
 
         $time = new \DateTime;
-        $time->sub(new \DateInterval(sprintf('PT0H0M%sS', $this->expireInterval));
+        $time->sub(new \DateInterval(sprintf('PT0H0M%sS', $this->expireInterval)));
 
         $adapter->deleteExpired($time);
 

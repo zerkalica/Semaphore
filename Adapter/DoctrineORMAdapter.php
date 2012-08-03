@@ -2,6 +2,7 @@
 namespace Millwright\Semaphore\Adapter;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DBALException;
 
 /**
  * Sql semaphore adapter
@@ -27,21 +28,21 @@ class DoctrineORMAdapter extends SqlAdapter
     /**
      * {@inheritDoc}
      */
-    protected function exec($query, $arg)
+    protected function exec($query, array $args)
     {
         $sth = $this->dbal->prepare(strtr($query, array('%table%' => $this->table)));
-        $sth->execute(array($arg));
+        $sth->execute($args);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function insert($query, $arg)
+    protected function insert($query, $args)
     {
         try {
-            $this->exec($query, $key);
+            $this->exec($query, $args);
             $ok = true;
-        } catch (\ErrorException $e) {
+        } catch (DBALException $e) {
             $ok = false;
         }
 
