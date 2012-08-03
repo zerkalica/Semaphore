@@ -11,7 +11,7 @@ interface SemaphoreManagerInterface
      *
      * @param string $key
      *
-     * @return void
+     * @return mixed handle
      */
     function acquire($key);
 
