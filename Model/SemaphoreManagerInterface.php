@@ -9,7 +9,7 @@ interface SemaphoreManagerInterface
     /**
      * Acquire semaphore
      *
-     * @param string $key
+     * @param string|object $key
      *
      * @return mixed handle
      */

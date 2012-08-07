@@ -36,6 +36,10 @@ class SemaphoreManager implements SemaphoreManagerInterface
      */
     public function acquire($key)
     {
+        if (is_object($key)) {
+            $key = spl_object_hash($key);
+        }
+
         $adapter = $this->defaultAdapter;
         $try     = $this->tryCount;
         $ok      = null;
