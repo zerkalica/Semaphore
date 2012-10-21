@@ -23,14 +23,7 @@ class FlockAdapter implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function deleteExpired(\DateTime $time)
-    {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function acquire($key)
+    public function acquire($key, $ttl)
     {
         $file   = $this->tmpDirectory . DIRECTORY_SEPARATOR . $key . '.lock';
         $handle = fopen($file, 'r+');

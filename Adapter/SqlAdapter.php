@@ -11,12 +11,25 @@ abstract class SqlAdapter implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function deleteExpired(\DateTime $time)
+    protected function deleteExpired(\DateTime $time)
     {
         $sqlDate = $time->format('Y-m-d H:i:s');
         $query   = 'DELETE FROM %table% WHERE expire_date < ?';
 
         $this->exec($query, array($sqlDate));
+    }
+
+    /**
+     * Invalidate old locks
+     *
+     * @param integer $ttl time to leave in seconds
+     */
+    protected function invalidate($ttl)
+    {
+        $time = new \DateTime;
+        $time->sub(new \DateInterval(sprintf('PT0H0M%sS', $ttl)));
+
+        $adapter->deleteExpired($time);
     }
 
     /**
@@ -40,8 +53,10 @@ abstract class SqlAdapter implements AdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function acquire($key)
+    public function acquire($key, $ttl)
     {
+        $this->invalidate($ttl);
+
         $query   = 'INSERT INTO %table% (expire_date, semaphore_key) VALUES(?, ?)';
         $time    = new \DateTime;
         $sqlDate = $time->format('Y-m-d H:i:s');

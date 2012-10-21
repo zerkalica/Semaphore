@@ -9,11 +9,12 @@ interface AdapterInterface
     /**
      * Acquire semaphore and return handle
      *
-     * @param string $key
+     * @param string  $key
+     * @param integer $ttl time to leave in seconds
      *
      * @return boolean
      */
-    function acquire($key);
+    function acquire($key, $ttl = 0);
 
     /**
      * Release semaphore
@@ -23,13 +24,4 @@ interface AdapterInterface
      * @return void
      */
     function release($handle);
-
-    /**
-     * Delete expired locks
-     *
-     * @param \DateTime $time delete all records older than this date
-     *
-     * @return void
-     */
-    function deleteExpired(\DateTime $time);
 }

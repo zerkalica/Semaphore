@@ -1,7 +1,7 @@
 {
     "name": "zerkalica/semaphore",
     "description": "This library provides an api for semaphore acquire and release",
-    "keywords": ["util"],
+    "keywords": ["util", "semaphore", "lock"],
     "type": "library",
     "license": "MIT",
     "authors": [

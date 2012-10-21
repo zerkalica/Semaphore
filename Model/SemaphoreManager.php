@@ -9,7 +9,7 @@ class SemaphoreManager implements SemaphoreManagerInterface
     protected $defaultAdapter;
     protected $tryCount;
     protected $sleepTime;
-    protected $expireInterval;
+    protected $prefix;
 
     protected $handlers = array();
 
@@ -17,16 +17,16 @@ class SemaphoreManager implements SemaphoreManagerInterface
      * Constructor
      *
      * @param AdapterInterface $adapter
-     * @param integer          $tryCount
-     * @param integer          $sleepTime
-     * @param integer          $expireInterval in seconds
+     * @param integer          $tryCount  try count, if lock not acquired
+     * @param integer          $sleepTime time in seconds , if lock not acquired wait and try again
+     * @param string           $prefix    lock key namespace
      */
-    public function __construct(AdapterInterface $adapter, $tryCount = 5, $sleepTime = 1, $expireInterval = 15)
+    public function __construct(AdapterInterface $adapter, $tryCount = 5, $sleepTime = 1, $prefix = 'millwright_semaphore')
     {
         $this->defaultAdapter = $adapter;
         $this->tryCount       = $tryCount;
         $this->sleepTime      = $sleepTime;
-        $this->expireInterval = $expireInterval;
+        $this->prefix         = $prefix;
     }
 
     /**
@@ -34,22 +34,18 @@ class SemaphoreManager implements SemaphoreManagerInterface
      *
      * @throws  \ErrorException If can't acquire lock
      */
-    public function acquire($key)
+    public function acquire($key, $maxLockTime = 60)
     {
         if (is_object($key)) {
             $key = spl_object_hash($key);
         }
+        $key = $this->prefix . $key;
 
         $adapter = $this->defaultAdapter;
         $try     = $this->tryCount;
         $ok      = null;
 
-        $time = new \DateTime;
-        $time->sub(new \DateInterval(sprintf('PT0H0M%sS', $this->expireInterval)));
-
-        $adapter->deleteExpired($time);
-
-        while ($try > 0 && !$ok = $adapter->acquire($key)) {
+        while ($try > 0 && !$ok = $adapter->acquire($key, $maxLockTime)) {
             $try--;
             sleep($this->sleepTime);
         }

@@ -4,19 +4,18 @@ namespace Millwright\Semaphore\Adapter;
 use Millwright\Semaphore\Model\AdapterInterface;
 
 /**
- * Sem semaphore adapter
+ * Apc semaphore adapter
  */
-class SemAdapter implements AdapterInterface
+class ApcAdapter implements AdapterInterface
 {
     /**
      * {@inheritDoc}
      */
     public function acquire($key, $ttl)
     {
-        $id = sem_get(crc32($key));
-        $ok = sem_acquire($id);
+        $ok = apc_apc($key, false, $ttl);
 
-        return $ok ? $id : null;
+        return $ok ? $key : null;
     }
 
     /**
@@ -26,6 +25,6 @@ class SemAdapter implements AdapterInterface
      */
     public function release($handle)
     {
-        sem_release($handle);
+        apc_delete($handle);
     }
 }
