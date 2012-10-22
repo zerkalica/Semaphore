@@ -28,8 +28,6 @@ class FlockAdapter implements AdapterInterface
         $file   = $this->tmpDirectory . DIRECTORY_SEPARATOR . $key . '.lock';
         $handle = fopen($file, 'r+');
 
-        $try = $this->tryCount;
-
         $locked = flock($handle, \LOCK_EX);
         if (!$locked) {
             @fclose($handle);
