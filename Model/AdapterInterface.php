@@ -14,7 +14,7 @@ interface AdapterInterface
      *
      * @return boolean
      */
-    function acquire($key, $ttl = 0);
+    function acquire($key, $ttl);
 
     /**
      * Release semaphore
