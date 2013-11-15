@@ -13,7 +13,7 @@ class ApcAdapter implements AdapterInterface
      */
     public function acquire($key, $ttl)
     {
-        $ok = apc_apc($key, false, $ttl);
+        $ok = apc_store($key, false, $ttl);
 
         return $ok ? $key : null;
     }

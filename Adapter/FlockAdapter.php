@@ -26,7 +26,7 @@ class FlockAdapter implements AdapterInterface
     public function acquire($key, $ttl)
     {
         $file   = $this->tmpDirectory . DIRECTORY_SEPARATOR . $key . '.lock';
-        $handle = fopen($file, 'r+');
+        $handle = fopen($file, 'w');
 
         $locked = flock($handle, \LOCK_EX);
         if (!$locked) {
