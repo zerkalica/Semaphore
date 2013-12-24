@@ -34,13 +34,9 @@ class SemaphoreManager implements SemaphoreManagerInterface
      *
      * @throws  \ErrorException If can't acquire lock
      */
-    public function acquire($key, $maxLockTime = 60)
+    public function acquire($srcKey, $maxLockTime = 60)
     {
-        if (is_object($key)) {
-            $key = spl_object_hash($key);
-        }
-        $key = $this->prefix . $key;
-
+        $key = $this->getKey($srcKey);
         $adapter = $this->defaultAdapter;
         $try     = $this->tryCount;
         $ok      = null;
@@ -62,14 +58,23 @@ class SemaphoreManager implements SemaphoreManagerInterface
     /**
      * {@inheritDoc}
      */
-    public function release($key)
+    public function release($srcKey)
     {
+        $key = $this->getKey($srcKey);
         if (!array_key_exists($key, $this->handlers)) {
             throw new \LogicException(sprintf('Call ::acquire(\'%s\') first', $key));
         }
 
-        $this->defaultAdapter->release($this->handlers[$key]);
+        $this->defaultAdapter->release($key);
 
         unset($this->handlers[$key]);
+    }
+
+    protected function getKey($key)
+    {
+        if (is_object($key)) {
+            $key = spl_object_hash($key);
+        }
+        return $this->prefix . $key;
     }
 }
