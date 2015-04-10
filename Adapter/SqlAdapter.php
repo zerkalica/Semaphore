@@ -28,8 +28,7 @@ abstract class SqlAdapter implements AdapterInterface
     {
         $time = new \DateTime;
         $time->sub(new \DateInterval(sprintf('PT0H0M%sS', $ttl)));
-
-        $adapter->deleteExpired($time);
+        $this->deleteExpired($time);
     }
 
     /**
