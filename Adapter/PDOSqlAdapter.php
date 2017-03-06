@@ -27,7 +27,7 @@ class PDOSqlAdapter extends SqlAdapter
      * Execute statement
      *
      * @param string $query
-     * @param mixed  $arg
+     * @param array $arg
      */
     protected function exec($query, array $args)
     {
@@ -38,7 +38,7 @@ class PDOSqlAdapter extends SqlAdapter
     /**
      * {@inheritDoc}
      */
-    protected function insert($query, array $args)
+    protected function insert($query, $args)
     {
         try {
             $this->exec($query, $args);
