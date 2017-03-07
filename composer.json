@@ -1,18 +1,29 @@
 {
-    "name": "zerkalica/semaphore",
-    "description": "This library provides an api for semaphore acquire and release",
-    "keywords": ["util", "semaphore", "lock"],
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Stefan Zerkalica",
-            "email": "zerkalica@gmai.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": { "Millwright\\Semaphore": "" }
+  "name": "pedromazala/semaphore",
+  "description": "This library provides an api for semaphore acquire and release",
+  "keywords": [
+    "util",
+    "semaphore",
+    "lock"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Stefan Zerkalica",
+      "email": "zerkalica@gmai.com"
     },
-    "target-dir": "Millwright/Semaphore",
-    "minimum-stability": "dev"
+    {
+      "name": "Pedro Mázala",
+      "email": "pedroh.mazala@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Millwright\\Semaphore": ""
+    }
+  },
+  "target-dir": "Millwright/Semaphore",
+  "minimum-stability": "dev"
 }
+
