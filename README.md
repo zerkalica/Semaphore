@@ -1,4 +1,4 @@
-Millwright semaphore library
+Semaphore - Forked by Millwright semaphore library
 ============================
 
 This library provides an api for semaphore acquire and release.

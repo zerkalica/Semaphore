@@ -1,7 +1,6 @@
 <?php
-namespace Millwright\Semaphore\Adapter;
 
-use Millwright\Semaphore\Model\AdapterInterface;
+namespace Millwright\Semaphore\Adapter;
 
 /**
  * Sql semaphore adapter
@@ -14,12 +13,16 @@ class PDOSqlAdapter extends SqlAdapter
     /**
      * Constructor
      *
-     * @param \PDO    $db
-     * @param string  $table
+     * @param \PDO $db
+     * @param string $table
      */
-    public function __construct(\PDO $db, $table)
+    public function __construct(\PDO $db, $table = null)
     {
-        $this->db    = $db;
+        $this->db = $db;
+
+        if (is_null($table)) {
+            $table = 'semaphore__semaphore';
+        }
         $this->table = $table;
     }
 
@@ -27,11 +30,11 @@ class PDOSqlAdapter extends SqlAdapter
      * Execute statement
      *
      * @param string $query
-     * @param array $arg
+     * @param array $args
      */
     protected function exec($query, array $args)
     {
-        $sth = $this->db->prepare(strtr($query, array('%table%' => $this->table)));
+        $sth = $this->db->prepare(strtr($query, array('%TABLE%' => $this->table)));
         $sth->execute($args);
     }
 
