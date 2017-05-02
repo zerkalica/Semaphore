@@ -1,4 +1,5 @@
 <?php
+
 namespace Millwright\Semaphore\Adapter;
 
 use Millwright\Semaphore\Model\AdapterInterface;
@@ -14,7 +15,7 @@ abstract class SqlAdapter implements AdapterInterface
     protected function deleteExpired(\DateTime $time)
     {
         $sqlDate = $time->format('Y-m-d H:i:s');
-        $query   = 'DELETE FROM %table% WHERE expire_date < ?';
+        $query = 'DELETE FROM %TABLE% WHERE expire_date < ?';
 
         $this->exec($query, array($sqlDate));
     }
@@ -35,7 +36,7 @@ abstract class SqlAdapter implements AdapterInterface
      * Execute statement
      *
      * @param string $query
-     * @param array  $arg
+     * @param array $arg
      */
     abstract protected function exec($query, array $args);
 
@@ -43,7 +44,7 @@ abstract class SqlAdapter implements AdapterInterface
      * Insert record
      *
      * @param string $query
-     * @param mixed  $arg
+     * @param mixed $arg
      *
      * @return boolean is inserted
      */
@@ -56,8 +57,8 @@ abstract class SqlAdapter implements AdapterInterface
     {
         $this->invalidate($ttl);
 
-        $query   = 'INSERT INTO %table% (expire_date, semaphore_key) VALUES(?, ?)';
-        $time    = new \DateTime;
+        $query = 'INSERT INTO %TABLE% (expire_date, semaphore_key) VALUES(?, ?)';
+        $time = new \DateTime;
         $sqlDate = $time->format('Y-m-d H:i:s');
         $ok = $this->insert($query, array($sqlDate, $key));
 
@@ -69,7 +70,7 @@ abstract class SqlAdapter implements AdapterInterface
      */
     public function release($handle)
     {
-        $query = 'DELETE FROM %table% WHERE semaphore_key = ?';
+        $query = 'DELETE FROM %TABLE% WHERE semaphore_key = ?';
         $this->exec($query, array($handle));
     }
 }

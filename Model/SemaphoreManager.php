@@ -1,4 +1,5 @@
 <?php
+
 namespace Millwright\Semaphore\Model;
 
 /**
@@ -17,16 +18,16 @@ class SemaphoreManager implements SemaphoreManagerInterface
      * Constructor
      *
      * @param AdapterInterface $adapter
-     * @param integer          $tryCount  try count, if lock not acquired
-     * @param integer          $sleepTime time in seconds , if lock not acquired wait and try again
-     * @param string           $prefix    lock key namespace
+     * @param integer $tryCount try count, if lock not acquired
+     * @param integer $sleepTime time in seconds , if lock not acquired wait and try again
+     * @param string $prefix lock key namespace
      */
     public function __construct(AdapterInterface $adapter, $tryCount = 5, $sleepTime = 1, $prefix = 'millwright_semaphore')
     {
         $this->defaultAdapter = $adapter;
-        $this->tryCount       = $tryCount;
-        $this->sleepTime      = $sleepTime;
-        $this->prefix         = $prefix;
+        $this->tryCount = $tryCount;
+        $this->sleepTime = $sleepTime;
+        $this->prefix = $prefix;
     }
 
     /**
@@ -38,8 +39,8 @@ class SemaphoreManager implements SemaphoreManagerInterface
     {
         $key = $this->getKey($srcKey);
         $adapter = $this->defaultAdapter;
-        $try     = $this->tryCount;
-        $ok      = null;
+        $try = $this->tryCount;
+        $ok = null;
 
         while ($try > 0 && !$ok = $adapter->acquire($key, $maxLockTime)) {
             $try--;
@@ -60,14 +61,13 @@ class SemaphoreManager implements SemaphoreManagerInterface
      */
     public function release($srcKey)
     {
-        $key = $this->getKey($srcKey);
-        if (!array_key_exists($key, $this->handlers)) {
-            throw new \LogicException(sprintf('Call ::acquire(\'%s\') first', $key));
+        if (!array_key_exists($srcKey, $this->handlers)) {
+            throw new \LogicException(sprintf('Call ::acquire(\'%s\') first', $srcKey));
         }
 
-        $this->defaultAdapter->release($key);
+        $this->defaultAdapter->release($srcKey);
 
-        unset($this->handlers[$key]);
+        unset($this->handlers[$srcKey]);
     }
 
     protected function getKey($key)
