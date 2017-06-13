@@ -30,7 +30,7 @@ class DoctrineORMAdapter extends SqlAdapter
      */
     protected function exec($query, array $args)
     {
-        $sth = $this->dbal->prepare(strtr($query, array('%table%' => $this->table)));
+        $sth = $this->dbal->prepare(strtr($query, array('%TABLE%' => $this->table)));
         $sth->execute($args);
     }
 
