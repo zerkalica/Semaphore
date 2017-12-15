@@ -65,7 +65,7 @@ class SemaphoreManager implements SemaphoreManagerInterface
             throw new \LogicException(sprintf('Call ::acquire(\'%s\') first', $srcKey));
         }
 
-        $this->defaultAdapter->release($srcKey);
+        $this->defaultAdapter->release($this->handlers[$srcKey]);
 
         unset($this->handlers[$srcKey]);
     }
