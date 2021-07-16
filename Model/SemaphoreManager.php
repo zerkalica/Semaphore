@@ -42,6 +42,10 @@ class SemaphoreManager implements SemaphoreManagerInterface
         $try = $this->tryCount;
         $ok = null;
 
+        if(array_key_exists($key, $this->handlers)) {
+            return 'fake_lock';
+        }
+
         while ($try > 0 && !$ok = $adapter->acquire($key, $maxLockTime)) {
             $try--;
             sleep($this->sleepTime);
@@ -61,6 +65,10 @@ class SemaphoreManager implements SemaphoreManagerInterface
      */
     public function release($srcKey)
     {
+        if($srcKey === 'fake_lock') {
+            return;
+        }
+
         if (!array_key_exists($srcKey, $this->handlers)) {
             throw new \LogicException(sprintf('Call ::acquire(\'%s\') first', $srcKey));
         }
@@ -75,6 +83,6 @@ class SemaphoreManager implements SemaphoreManagerInterface
         if (is_object($key)) {
             $key = spl_object_hash($key);
         }
-        return $this->prefix . $key;
+        return 'real_lock' . $this->prefix . $key;
     }
 }
